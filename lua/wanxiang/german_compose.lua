@@ -49,12 +49,45 @@ local function reset(env)
     env.accent = nil
 end
 
+local function key_name(key)
+    return (key:repr() or ""):gsub("^Release%+", ""):gsub("^Control%+", ""):gsub("^Alt%+", ""):gsub("^Super%+", ""):gsub("^Shift%+", "")
+end
+
 local function letter_of(key)
     local code = key.keycode
-    if code >= 65 and code <= 90 or code >= 97 and code <= 122 then
+    if (code >= 65 and code <= 90) or (code >= 97 and code <= 122) then
         return string.lower(string.char(code))
     end
+    local name = key_name(key)
+    if #name == 1 then
+        local byte = string.byte(name)
+        if (byte >= 65 and byte <= 90) or (byte >= 97 and byte <= 122) then
+            return string.lower(name)
+        end
+    end
     return nil
+end
+
+-- 小狼毫里 Shift+o 有时 keycode 已是大写 O，但 shift() 为 false。
+local function wants_upper(key)
+    if key:shift() or key:caps() then
+        return true
+    end
+    local code = key.keycode
+    if code >= 65 and code <= 90 then
+        return true
+    end
+    local repr = key:repr() or ""
+    return repr:find("Shift+", 1, true) ~= nil
+end
+
+local function is_modifier(key)
+    local repr = key:repr() or ""
+    if modifiers[repr] then
+        return true
+    end
+    local code = key.keycode
+    return code >= 0xffe1 and code <= 0xffee
 end
 
 -- 重音直接用键，不按 Shift：` 抑音符，6 扬抑符，' 分音符，7 连字。
@@ -64,7 +97,7 @@ local function accent_of(key)
         return nil
     end
 
-    local name = (key:repr() or ""):gsub("^Release%+", "")
+    local name = key_name(key)
     local code = key.keycode
 
     if name == "grave" or name == "`" or code == string.byte("`") then
@@ -87,7 +120,7 @@ local function commit_mapped(env, key, lower_map, upper_map)
     if not ch or not lower_map[ch] then
         return false
     end
-    local text = key:shift() and upper_map[ch] or lower_map[ch]
+    local text = wants_upper(key) and upper_map[ch] or lower_map[ch]
     env.engine:commit_text(text)
     reset(env)
     return true
@@ -119,7 +152,7 @@ function M.func(key, env)
         return 2
     end
 
-    if modifiers[key:repr()] then
+    if is_modifier(key) then
         return 2
     end
 
