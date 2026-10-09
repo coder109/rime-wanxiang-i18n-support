@@ -57,6 +57,7 @@ switches:
 # 输入引擎
 engine:
   processors:
+    - lua_processor@*wanxiang.german_compose  #英文状态下 Ctrl+; 输入德法字母
     - lua_processor@*wanxiang.super_processor  #KP小键盘、字母选词、符号快打、超强分词、重复限制、退格限制、声调回退、以词定字
     - lua_processor@*wanxiang.unicode_conversion*P  # 通过ctrl+u快捷键捕获当前高亮候选转换查询unicode，重复按下可还原
     - lua_processor@*wanxiang.context_reorder*P  #靠自己养的专属上下文调频工具
