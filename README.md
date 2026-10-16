@@ -1,6 +1,6 @@
 # 万象拼音 · 多语言字母
 
-在 [万象拼音](https://github.com/amzxyz/rime-wanxiang) 上增加德文、法文字母输入。中文拼音、词库和语法模型仍用万象，这份仓库只额外处理英文状态下的特殊字母。个人使用优先。
+在 [万象拼音](https://github.com/amzxyz/rime-wanxiang) 上增加德文、法文字母输入。中文拼音和词库仍用万象。语法模型在方案里关掉，避免打长句时卡顿。这份仓库只额外处理英文状态下的特殊字母。个人使用优先。
 
 字母输入由 `lua/wanxiang/german_compose.lua` 完成，挂在 `wanxiang.schema.yaml` 的处理器最前面。
 
@@ -34,7 +34,7 @@
 
 需要能运行 Lua 的 Rime 前端，例如 Windows 上的小狼毫、macOS 上的鼠须管、Linux 上的 fcitx5。万象 Pure 不带 Lua，用不了这里的字母输入。
 
-1. 安装并部署一套万象拼音 Base。词库、模型和双拼切换以[万象文档](https://amzxyz.github.io/rime-wanxiang/)为准。
+1. 安装并部署一套万象拼音 Base。词库和双拼切换以[万象文档](https://amzxyz.github.io/rime-wanxiang/)为准。语法模型按本仓库方案保持关闭。
 2. 把本仓库的 `lua/wanxiang/german_compose.lua` 放到用户目录的同名路径。
 3. 确认 `wanxiang.schema.yaml` 里，`engine/processors` 的第一项是：
 
@@ -49,6 +49,8 @@
 ### 打中文
 
 中文状态和原来的万象一样：全拼或双拼、声调筛选、超级提示都不变。这个脚本只在英文状态里看 `Ctrl+;`，不会吃掉拼音编码。
+
+`wanxiang.schema.yaml` 里语法模型是关的：`grammar` 整段注释掉，`translator/contextual_suggestions` 为 `false`。整句和用户调频仍走词库，不再加载 `wanxiang-lts-zh-hans.gram`。
 
 ### 打德法字母
 
