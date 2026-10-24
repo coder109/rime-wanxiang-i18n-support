@@ -11,8 +11,8 @@
           "file": "wanxiang/Custom_STPhrases.txt"
         },
         {
-          "type": "ocd2",
-          "file": "wanxiang/STPhrases.ocd2"
+          "type": "text",
+          "file": "wanxiang/STPhrases.txt"
         }
       ]
     }
@@ -28,12 +28,12 @@
             "file": "wanxiang/Custom_STPhrases.txt"
           },
           {
-            "type": "ocd2",
-            "file": "wanxiang/STPhrases.ocd2"
+            "type": "text",
+            "file": "wanxiang/STPhrases.txt"
           },
           {
-            "type": "ocd2",
-            "file": "wanxiang/STCharacters.ocd2"
+            "type": "text",
+            "file": "wanxiang/STCharacters.txt"
           }
         ]
       }
